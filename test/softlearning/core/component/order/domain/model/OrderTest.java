@@ -176,15 +176,15 @@ public class OrderTest {
      * Test of isFragile method, of class Order.
      */
     @Test
-    public void testIsFragile() {
-        System.out.println("isFragile");
-        Order instance = new Order();
-        boolean expResult = false;
-        boolean result = instance.isFragile();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testIsFragile() throws BuildException {
+    
+    String physics = "h:10.0,w:5.0,d:3.0,W:50.0,f:true";
+    this.instance.setPackageDimensions(physics);
+
+    
+    assertTrue(this.instance.isFragile());
     }
+
 
     /**
      * Test of getClientId method, of class Order.
