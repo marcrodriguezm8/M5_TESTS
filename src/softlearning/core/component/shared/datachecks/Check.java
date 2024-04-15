@@ -27,6 +27,9 @@ public class Check {
         }
         return 0;
     }
+    public static int checkDouble (Double doubleToCheck) {
+        return doubleToCheck < 0 ? -1 : 1;
+    }
     
     public static int checkInteger(int value, int min){
         if (value < min) {

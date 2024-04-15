@@ -24,7 +24,7 @@ import softlearning.core.component.shared.products.Marketable;
  * @author Alumnes
  */
 public class OrderTest {
-    
+    private final PhysicalData p;
     private final Order instance;
     private final Client c;
     
@@ -32,6 +32,7 @@ public class OrderTest {
         this.c = Client.getInstance("Jose Meseguer", "12345456X", "22-02-2000", "carrer kalea 2", 
                     "666555444", "111222333444", "********", 1, false, "2023-02-10");
         this.instance = Order.getInstance(1991, "10/02/2023-09:10:15", "Esta es una descripcion breve", c);
+        this.p = new PhysicalData(10.0, 5.0, 3.0, 50.0, true);
     }
     
     @Before
@@ -113,13 +114,7 @@ public class OrderTest {
      */
     @Test
     public void testGetSize() {
-        System.out.println("getSize");
-        Order instance = new Order();
-        String expResult = "";
-        String result = instance.getSize();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(0, this.instance.getSize());
     }
 
     /**
