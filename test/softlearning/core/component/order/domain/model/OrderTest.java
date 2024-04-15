@@ -135,13 +135,7 @@ public class OrderTest {
      */
     @Test
     public void testGetSize() {
-        System.out.println("getSize");
-        Order instance = new Order();
-        String expResult = "";
-        String result = instance.getSize();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(0, this.instance.getSize());
     }
 
     /**
