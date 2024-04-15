@@ -49,14 +49,63 @@ public class OrderTest {
     @Test
     public void testGetInstanceBadId() {
         Order order = null;
-        String expectedResult = "Bad ID;";
+        System.out.println("hola");
+        String expectedResult = "Bad ID";
         String result = "";
         try {
             order = Order.getInstance(-1, "10/02/2023-09:10:15", "Esta es una descripcion breve", c);
         } catch (BuildException ex) {
             result += ex.getMessage();
         }
+        
         assertEquals(result, expectedResult);
+    }
+    @Test
+    public void testGetInstanceStartDate() {
+        Order order = null;
+        String expectedResult = "ERROR AL PARSEAR FECHA";
+        String result = "";
+        try {
+            order = Order.getInstance(1, "10/02/2023", "Esta es una descripcion breve", c);
+        } catch (BuildException ex) {
+            result += ex.getMessage();
+        }
+        assertTrue(result.startsWith(expectedResult));
+    }
+    @Test
+    public void testGetInstanceBadDescription() {
+        Order order = null;
+        String expectedResult = "Bad Description";
+        String result = "";
+        try {
+            order = Order.getInstance(1, "10/02/2023-09:10:15", "Mal", c);
+        } catch (BuildException ex) {
+            result += ex.getMessage();
+        }
+        assertEquals(result, expectedResult);
+    }
+    @Test
+    public void testGetInstanceBadClient() throws BuildException{
+        Order order = null;
+        String result = "";
+        String[] expectedResult = {"Bad", "ERROR"};
+        
+        try {
+            Client client = Client.getInstance("Ma", "12345456X", "22-02-2000", "carrer kalea 2", 
+        "666555444", "111222333444", "********", 1, false, "2023-02-10");
+            order = Order.getInstance(1, "10/02/2023-09:10:15", "Esto es una descripción breve", client);
+        } catch (BuildException ex) {
+            result += ex.getMessage();
+        }
+        System.out.println(result);
+        Boolean detected = false;
+
+        for(String word : expectedResult) {
+            System.out.println(word);
+            if(result.contains(word)) detected = true;
+        }
+        
+        assertTrue(detected);
     }
 
     /**

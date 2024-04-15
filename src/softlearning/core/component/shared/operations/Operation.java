@@ -19,13 +19,14 @@ public abstract class Operation {
     }
     
     public void checkData(int id, String startDate, String description) throws BuildException{
-        this.ident = id;
+        
         try {
+            setIdent(id);
             setStartDate (startDate);
+            setDescription(description);
         } catch (GeneralDateTimeException ex) {
             throw new BuildException(ex.getMessage());
         }
-        this.description = description;
     }
             
 
@@ -33,16 +34,22 @@ public abstract class Operation {
         return this.ident;
     }
 
-    public void setIdent(int ident) {
-        this.ident = ident;
+    public void setIdent(int ident) throws BuildException{
+        if(Check.checkInteger(ident, 1) == 0){
+            this.ident = ident;
+        }
+        else throw new BuildException("Bad ID");
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescription(String description) throws BuildException{
+        if(Check.checkString(description, 10) == 0){
+            this.description = description;
+        }
+        else throw new BuildException("Bad Description");
     }
 
     public String getStatus() {
