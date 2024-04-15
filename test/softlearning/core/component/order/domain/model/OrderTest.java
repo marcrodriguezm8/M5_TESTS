@@ -113,37 +113,43 @@ public class OrderTest {
      * Test of getSize method, of class Order.
      */
     @Test
-    public void testGetSize() {
-        assertEquals(0, this.instance.getSize());
-    }
+    public void testGetSize() throws BuildException {
+    
+    String physics = "h:10.0,w:5.0,d:3.0,W:50.0,f:true";
+    this.instance.setPackageDimensions(physics);
+
+    
+    String expectedSize = "heigth:10.0;width:5.0;depth:3.0";
+    assertEquals(expectedSize, this.instance.getSize());
+}
+
+    
 
     /**
      * Test of getVolum method, of class Order.
      */
     @Test
-    public void testGetVolum() {
-        System.out.println("getVolum");
-        Order instance = new Order();
-        double expResult = 0.0;
-        double result = instance.getVolum();
-        assertEquals(expResult, result, 0);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
+    public void testGetVolum() throws BuildException {
+    String physics = "h:10.0,w:5.0,d:3.0,W:50.0,f:true";
+    this.instance.setPackageDimensions(physics);
+
+    double expectedVolume = 10.0 * 5.0 * 3.0;
+    assertEquals(expectedVolume, this.instance.getVolum(), 0.01); // 0.01 es el margen de error permitido
+}
+
 
     /**
      * Test of getWeight method, of class Order.
      */
     @Test
-    public void testGetWeight() {
-        System.out.println("getWeight");
-        Order instance = new Order();
-        double expResult = 0.0;
-        double result = instance.getWeight();
-        assertEquals(expResult, result, 0);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testGetWeight() throws BuildException {
+        String physics = "h:10.0,w:5.0,d:3.0,W:50.0,f:true";
+        this.instance.setPackageDimensions(physics);
+    
+        double expectedWeight = 50.0;
+        assertEquals(expectedWeight, this.instance.getWeight(), 0.01); // 0.01 es el margen de error permitido
     }
+    
 
     /**
      * Test of isFragile method, of class Order.
