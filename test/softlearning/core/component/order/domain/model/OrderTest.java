@@ -4,6 +4,7 @@
  */
 package softlearning.core.component.order.domain.model;
 
+import java.util.ArrayList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +13,9 @@ import org.junit.rules.ExpectedException;
 import softlearning.core.component.client.domain.model.Client;
 import softlearning.core.component.shared.exceptions.BuildException;
 import softlearning.core.component.shared.exceptions.GeneralDateTimeException;
+import softlearning.core.component.shared.exceptions.ServiceException;
 import softlearning.core.component.shared.physics.PhysicalData;
+import softlearning.core.component.book.domain.model.Book;
 
 import java.util.Optional;
 
@@ -24,16 +27,32 @@ import softlearning.core.component.shared.products.Marketable;
  * @author Alumnes
  */
 public class OrderTest {
-    
+
     private final Order instance;
     private final Client c;
-    
-    public OrderTest() throws BuildException{
-        this.c = Client.getInstance("Jose Meseguer", "12345456X", "22-02-2000", "carrer kalea 2", 
-                    "666555444", "111222333444", "********", 1, false, "2023-02-10");
+
+    //private final ArrayList<OrderDetail> shopCart;
+
+    public OrderTest() throws BuildException, ServiceException {
+        Book b1 = Book.getInstance(101, "PHP avanzado", "CEFPNuria", "Programacion", "PHP",
+                "Richard Stallman", 14.95, "7234567891013", 2, "23-10-2021",
+                12.0, 18.0, 2.0, 0.3, false);
+        Book b2 = Book.getInstance(102, "Java para todos", "CEFPNuria", "Programacion", "Java basico",
+                "Uncle Bob", 19.95, "1234567891013", 4, "22-10-2019",
+                12.0, 18.0, 2.0, 0.3, false);
+        Book b3 = Book.getInstance(103, "C# intro", "CEFPNuria", "Programacion", "C# basico",
+                "John Williams", 24.95, "5234567891013", 3, "12-12-2020",
+                12.0, 18.0, 2.0, 0.3, false);
+       
+        this.c = Client.getInstance("Jose Meseguer", "12345456X", "22-02-2000", "carrer kalea 2",
+                "666555444", "111222333444", "********", 1, false, "2023-02-10");
         this.instance = Order.getInstance(1991, "10/02/2023-09:10:15", "Esta es una descripcion breve", c);
+
+        this.instance.setDetail(b1, 2);
+        this.instance.setDetail(b2, 1);
+        this.instance.setDetail(b3, 4);
     }
-    
+
     @Before
     public void setUp() throws Exception {
     }
@@ -41,7 +60,6 @@ public class OrderTest {
     @After
     public void tearDown() throws Exception {
     }
-
 
     /**
      * Test of getInstance method, of class Order.
@@ -57,9 +75,10 @@ public class OrderTest {
         } catch (BuildException ex) {
             result += ex.getMessage();
         }
-        
+
         assertEquals(result, expectedResult);
     }
+
     @Test
     public void testGetInstanceStartDate() {
         Order order = null;
@@ -72,6 +91,7 @@ public class OrderTest {
         }
         assertTrue(result.startsWith(expectedResult));
     }
+
     @Test
     public void testGetInstanceBadDescription() {
         Order order = null;
@@ -84,15 +104,16 @@ public class OrderTest {
         }
         assertEquals(result, expectedResult);
     }
+
     @Test
-    public void testGetInstanceBadClient() throws BuildException{
+    public void testGetInstanceBadClient() throws BuildException {
         Order order = null;
         String result = "";
-        String[] expectedResult = {"Bad", "ERROR"};
-        
+        String[] expectedResult = { "Bad", "ERROR" };
+
         try {
-            Client client = Client.getInstance("Ma", "12345456X", "22-02-2000", "carrer kalea 2", 
-        "666555444", "111222333444", "********", 1, false, "2023-02-10");
+            Client client = Client.getInstance("Ma", "12345456X", "22-02-2000", "carrer kalea 2",
+                    "666555444", "111222333444", "********", 1, false, "2023-02-10");
             order = Order.getInstance(1, "10/02/2023-09:10:15", "Esto es una descripción breve", client);
         } catch (BuildException ex) {
             result += ex.getMessage();
@@ -100,11 +121,12 @@ public class OrderTest {
         System.out.println(result);
         Boolean detected = false;
 
-        for(String word : expectedResult) {
+        for (String word : expectedResult) {
             System.out.println(word);
-            if(result.contains(word)) detected = true;
+            if (result.contains(word))
+                detected = true;
         }
-        
+
         assertTrue(detected);
     }
 
@@ -169,13 +191,7 @@ public class OrderTest {
      */
     @Test
     public void testGetClientId() {
-        System.out.println("getClientId");
-        Order instance = new Order();
-        int expResult = 0;
-        int result = instance.getClientId();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(this.c.getCode(), 1);
     }
 
     /**
@@ -183,13 +199,7 @@ public class OrderTest {
      */
     @Test
     public void testGetNumDetails() {
-        System.out.println("getNumDetails");
-        Order instance = new Order();
-        int expResult = 0;
-        int result = instance.getNumDetails();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(this.instance.getNumDetails(), 3);
     }
 
     /**
@@ -211,14 +221,7 @@ public class OrderTest {
      */
     @Test
     public void testGetDetail_int() throws Exception {
-        System.out.println("getDetail");
-        int pos = 0;
-        Order instance = new Order();
-        String expResult = "";
-        String result = instance.getDetail(pos);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(this.instance.getDetail(1), "102,Java para todos,19.95,1,0.0");
     }
 
     /**
@@ -226,14 +229,7 @@ public class OrderTest {
      */
     @Test
     public void testGetDetail_String() throws Exception {
-        System.out.println("getDetail");
-        String ref = "";
-        Order instance = new Order();
-        String expResult = "";
-        String result = instance.getDetail(ref);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(this.instance.getDetail("102"), "102,Java para todos,19.95,1,0.0");
     }
 
     /**
@@ -241,14 +237,7 @@ public class OrderTest {
      */
     @Test
     public void testGetDetail_OrderDetail() throws Exception {
-        System.out.println("getDetail");
-        OrderDetail od = null;
-        Order instance = new Order();
-        String expResult = "";
-        String result = instance.getDetail(od);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(this.instance.getDetail(this.instance.shopCart.get(1)), "102,Java para todos,19.95,1,0.0");
     }
 
     /**
@@ -349,13 +338,7 @@ public class OrderTest {
      */
     @Test
     public void testGetPrice() {
-        System.out.println("getPrice");
-        Order instance = new Order();
-        double expResult = 0.0;
-        double result = instance.getPrice();
-        assertEquals(expResult, result, 0);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(this.instance.getPrice(), 149.64999999999998, 0.001);
     }
 
     /**
@@ -363,14 +346,7 @@ public class OrderTest {
      */
     @Test
     public void testFindByPos() {
-        System.out.println("findByPos");
-        int pos = 0;
-        Order instance = new Order();
-        OrderDetail expResult = null;
-        OrderDetail result = instance.findByPos(pos);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(this.instance.findByPos(1).toString(), "102,Java para todos,19.95,1,0.0");
     }
 
     /**
@@ -378,14 +354,7 @@ public class OrderTest {
      */
     @Test
     public void testFindByRef() {
-        System.out.println("findByRef");
-        String ref = "";
-        Order instance = new Order();
-        OrderDetail expResult = null;
-        OrderDetail result = instance.findByRef(ref);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(this.instance.findByRef("102").toString(), "102,Java para todos,19.95,1,0.0");
     }
 
     /**
@@ -430,13 +399,7 @@ public class OrderTest {
      */
     @Test
     public void testGetTotalCost() {
-        System.out.println("getTotalCost");
-        Order instance = new Order();
-        double expResult = 0.0;
-        double result = instance.getTotalCost();
-        assertEquals(expResult, result, 0);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(this.instance.getTotalCost(), 0, 0.0001);
     }
 
     /**
@@ -444,13 +407,7 @@ public class OrderTest {
      */
     @Test
     public void testGetClientData() {
-        System.out.println("getClientData");
-        Order instance = new Order();
-        String expResult = "";
-        String result = instance.getClientData();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(this.instance.getClientData(), "name:Jose Meseguer;phone:666555444;address:carrer kalea 2");
     }
 
     /**
@@ -458,12 +415,6 @@ public class OrderTest {
      */
     @Test
     public void testGetShopCart() {
-        System.out.println("getShopCart");
-        Order instance = new Order();
-        String expResult = "";
-        String result = instance.getShopCart();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        assertEquals(this.instance.getShopCart(), "101,PHP avanzado,14.95,2,0.0;102,Java para todos,19.95,1,0.0;103,C# intro,24.95,4,0.0;");
     }
 }
