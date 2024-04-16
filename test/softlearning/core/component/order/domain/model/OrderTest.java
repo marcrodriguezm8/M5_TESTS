@@ -20,12 +20,18 @@ import static org.junit.Assert.*;
  */
 public class OrderTest {
 
-    private final Order instance;
-    private final Client c;
+    private Order instance;
+    private Client c;
 
     //private final ArrayList<OrderDetail> shopCart;
 
-    public OrderTest() throws BuildException, ServiceException {
+    public OrderTest() {}
+
+    // Para inicializar los objetos que se van a utilizar en los tests, se deben insertar en el método setUp.
+    // El método setUp se ejecuta antes de cada test y nos asegura que los objetos son creados correctamente
+    // y sin alteraciones entre tests.
+    @Before
+    public void setUp() throws BuildException, ServiceException {
         Book b1 = Book.getInstance(101, "PHP avanzado", "CEFPNuria", "Programacion", "PHP",
                 "Richard Stallman", 14.95, "7234567891013", 2, "23-10-2021",
                 12.0, 18.0, 2.0, 0.3, false);
@@ -38,6 +44,7 @@ public class OrderTest {
 
         this.c = Client.getInstance("Jose Meseguer", "12345456X", "22-02-2000", "carrer kalea 2",
                 "666555444", "111222333444", "********", 1, false, "2023-02-10");
+
         this.instance = Order.getInstance(1991, "10/02/2023-09:10:15", "Esta es una descripcion breve", c);
 
         this.instance.setDetail(b1, 2);
@@ -45,12 +52,13 @@ public class OrderTest {
         this.instance.setDetail(b3, 4);
     }
 
-    @Before
-    public void setUp() throws Exception {
-    }
-
+    // El método tearDown() sirve para limpiar los objetos que se han utilizado en los tests.
+    // En el caso de este proyecto, no es necesario limpiar nada, pero es una buena práctica ya que facilita la
+    // limpieza de memoria por parte del Garbage Collector.
     @After
     public void tearDown() throws Exception {
+        this.instance = null;
+        this.c = null;
     }
 
     /**
