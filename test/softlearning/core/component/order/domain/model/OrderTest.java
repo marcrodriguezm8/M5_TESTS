@@ -4,26 +4,18 @@
  */
 package softlearning.core.component.order.domain.model;
 
-import java.util.ArrayList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.internal.runners.statements.ExpectException;
-import org.junit.rules.ExpectedException;
+import softlearning.core.component.book.domain.model.Book;
 import softlearning.core.component.client.domain.model.Client;
 import softlearning.core.component.shared.exceptions.BuildException;
-import softlearning.core.component.shared.exceptions.GeneralDateTimeException;
 import softlearning.core.component.shared.exceptions.ServiceException;
-import softlearning.core.component.shared.physics.PhysicalData;
-import softlearning.core.component.book.domain.model.Book;
-
-import java.util.Optional;
-
-import static org.junit.Assert.*;
 import softlearning.core.component.shared.products.Marketable;
 
+import static org.junit.Assert.*;
+
 /**
- *
  * @author Alumnes
  */
 public class OrderTest {
@@ -43,7 +35,7 @@ public class OrderTest {
         Book b3 = Book.getInstance(103, "C# intro", "CEFPNuria", "Programacion", "C# basico",
                 "John Williams", 24.95, "5234567891013", 3, "12-12-2020",
                 12.0, 18.0, 2.0, 0.3, false);
-       
+
         this.c = Client.getInstance("Jose Meseguer", "12345456X", "22-02-2000", "carrer kalea 2",
                 "666555444", "111222333444", "********", 1, false, "2023-02-10");
         this.instance = Order.getInstance(1991, "10/02/2023-09:10:15", "Esta es una descripcion breve", c);
@@ -109,7 +101,7 @@ public class OrderTest {
     public void testGetInstanceBadClient() throws BuildException {
         Order order = null;
         String result = "";
-        String[] expectedResult = { "Bad", "ERROR" };
+        String[] expectedResult = {"Bad", "ERROR"};
 
         try {
             Client client = Client.getInstance("Ma", "12345456X", "22-02-2000", "carrer kalea 2",
@@ -119,7 +111,7 @@ public class OrderTest {
             result += ex.getMessage();
         }
         System.out.println(result);
-        Boolean detected = false;
+        boolean detected = false;
 
         for (String word : expectedResult) {
             System.out.println(word);
@@ -135,28 +127,27 @@ public class OrderTest {
      */
     @Test
     public void testGetSize() throws BuildException {
-    
-    String physics = "h:10.0,w:5.0,d:3.0,W:50.0,f:true";
-    this.instance.setPackageDimensions(physics);
 
-    
-    String expectedSize = "heigth:10.0;width:5.0;depth:3.0";
-    assertEquals(expectedSize, this.instance.getSize());
-}
+        String physics = "h:10.0,w:5.0,d:3.0,W:50.0,f:true";
+        this.instance.setPackageDimensions(physics);
 
-    
+
+        String expectedSize = "heigth:10.0;width:5.0;depth:3.0";
+        assertEquals(expectedSize, this.instance.getSize());
+    }
+
 
     /**
      * Test of getVolum method, of class Order.
      */
     @Test
     public void testGetVolum() throws BuildException {
-    String physics = "h:10.0,w:5.0,d:3.0,W:50.0,f:true";
-    this.instance.setPackageDimensions(physics);
+        String physics = "h:10.0,w:5.0,d:3.0,W:50.0,f:true";
+        this.instance.setPackageDimensions(physics);
 
-    double expectedVolume = 10.0 * 5.0 * 3.0;
-    assertEquals(expectedVolume, this.instance.getVolum(), 0.01); // 0.01 es el margen de error permitido
-}
+        double expectedVolume = 10.0 * 5.0 * 3.0;
+        assertEquals(expectedVolume, this.instance.getVolum(), 0.01); // 0.01 es el margen de error permitido
+    }
 
 
     /**
@@ -166,23 +157,21 @@ public class OrderTest {
     public void testGetWeight() throws BuildException {
         String physics = "h:10.0,w:5.0,d:3.0,W:50.0,f:true";
         this.instance.setPackageDimensions(physics);
-    
+
         double expectedWeight = 50.0;
         assertEquals(expectedWeight, this.instance.getWeight(), 0.01); // 0.01 es el margen de error permitido
     }
-    
+
 
     /**
      * Test of isFragile method, of class Order.
      */
     @Test
     public void testIsFragile() throws BuildException {
-    
-    String physics = "h:10.0,w:5.0,d:3.0,W:50.0,f:true";
-    this.instance.setPackageDimensions(physics);
+        String physics = "h:10.0,w:5.0,d:3.0,W:50.0,f:true";
+        this.instance.setPackageDimensions(physics);
 
-    
-    assertTrue(this.instance.isFragile());
+        assertTrue(this.instance.isFragile());
     }
 
 
@@ -240,52 +229,87 @@ public class OrderTest {
         assertEquals(this.instance.getDetail(this.instance.shopCart.get(1)), "102,Java para todos,19.95,1,0.0");
     }
 
-    /**
+    /*
      * Test of updateDetail method, of class Order.
+     * Test the updateDetail method with a wrong order status
      */
     @Test
-    public void testUpdateDetail_int_int() throws Exception {
-        System.out.println("updateDetail");
-        int pos = 0;
-        int amount = 0;
-        Order instance = new Order();
-        int expResult = 0;
-        int result = instance.updateDetail(pos, amount);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void test_update_detail_order_status_wrong() throws ServiceException {
+        int expectedResult = -1;
+
+        this.instance.orderConfirmation();
+        int result = this.instance.updateDetail(0, 1);
+
+        assertEquals(expectedResult, result);
     }
 
-    /**
+    /*
      * Test of updateDetail method, of class Order.
+     * Test the updateDetail method with a non-existent detail by position
      */
     @Test
-    public void testUpdateDetail_String_int() throws Exception {
-        System.out.println("updateDetail");
-        String ref = "";
-        int amount = 0;
-        Order instance = new Order();
-        int expResult = 0;
-        int result = instance.updateDetail(ref, amount);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void test_update_detail_order_non_existent_by_position() {
+        String expectedResult = "Detail not found";
+        String result = null;
+
+        try {
+            this.instance.updateDetail(10, 1);
+            fail("Expected a ServiceException to be thrown when the detail does not exist.");
+        } catch (ServiceException e) {
+            result = e.getMessage();
+        }
+
+        assertEquals(expectedResult, result);
     }
 
-    /**
+    /*
      * Test of updateDetail method, of class Order.
+     * Test the updateDetail method with a non-existent detail by reference
      */
     @Test
-    public void testUpdateDetail_OrderDetail_int() throws Exception {
-        System.out.println("updateDetail");
-        OrderDetail od = null;
-        int amount = 0;
-        Order instance = new Order();
-        int expResult = 0;
-        int result = instance.updateDetail(od, amount);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void test_update_detail_order_non_existent_by_reference() {
+        String expectedResult = "Detail not found";
+        String result = null;
+
+        try {
+            this.instance.updateDetail("999", 1);
+            fail("Expected a ServiceException to be thrown when the detail does not exist.");
+        } catch (ServiceException e) {
+            result = e.getMessage();
+        }
+
+        assertEquals(expectedResult, result);
+    }
+
+    /*
+     * Test of updateDetail method, of class Order.
+     * Test the updateDetail method with a less than 0 amount
+     */
+    @Test
+    public void test_update_detail_order_zero_amount() {
+        String expectedResult = "Amount can be greatter than 0";
+        String result = "";
+
+        try {
+            this.instance.updateDetail(0, -1);
+            fail("Expected a ServiceException to be thrown when the amount is zero.");
+        } catch (ServiceException e) {
+            result = e.getMessage();
+        }
+
+        assertEquals(expectedResult, result);
+    }
+
+    /*
+     * Test of updateDetail method, of class Order.
+     * Test the updateDetail method with a correct amount and position
+     */
+    @Test
+    public void test_update_detail_order_correct_amount_position() throws ServiceException {
+        int expectedResult = 0;
+        int result = this.instance.updateDetail(0, 1);
+
+        assertEquals(expectedResult, result);
     }
 
     /**
