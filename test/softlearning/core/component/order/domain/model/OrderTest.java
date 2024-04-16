@@ -312,49 +312,88 @@ public class OrderTest {
         assertEquals(expectedResult, result);
     }
 
-    /**
+    /*
      * Test of deleteDetail method, of class Order.
+     * Test the deleteDetail method with a wrong order status
      */
     @Test
-    public void testDeleteDetail_int() throws Exception {
-        System.out.println("deleteDetail");
-        int pos = 0;
-        Order instance = new Order();
-        int expResult = 0;
-        int result = instance.deleteDetail(pos);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void test_delete_detail_order_status_wrong() throws ServiceException {
+        int expectedResult = -1;
+
+        this.instance.orderConfirmation();
+        int result = this.instance.deleteDetail(0);
+
+        assertEquals(expectedResult, result);
     }
 
-    /**
+    /*
      * Test of deleteDetail method, of class Order.
+     * Test the deleteDetail method with a non-existent detail by position
      */
     @Test
-    public void testDeleteDetail_String() throws Exception {
-        System.out.println("deleteDetail");
-        String ref = "";
-        Order instance = new Order();
-        int expResult = 0;
-        int result = instance.deleteDetail(ref);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void test_delete_detail_order_non_existent_by_position() {
+        String expectedResult = "Detail not found";
+        String result = null;
+
+        try {
+            this.instance.deleteDetail(10);
+            fail("Expected a ServiceException to be thrown when the detail does not exist.");
+        } catch (ServiceException e) {
+            result = e.getMessage();
+        }
+
+        assertEquals(expectedResult, result);
     }
 
-    /**
+    /*
      * Test of deleteDetail method, of class Order.
+     * Test the deleteDetail method with a non-existent detail by reference
      */
     @Test
-    public void testDeleteDetail_OrderDetail() throws Exception {
-        System.out.println("deleteDetail");
-        OrderDetail od = null;
-        Order instance = new Order();
-        int expResult = 0;
-        int result = instance.deleteDetail(od);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void test_delete_detail_order_non_existent_by_reference() {
+        String expectedResult = "Detail not found";
+        String result = null;
+
+        try {
+            this.instance.deleteDetail("999");
+            fail("Expected a ServiceException to be thrown when the detail does not exist.");
+        } catch (ServiceException e) {
+            result = e.getMessage();
+        }
+
+        assertEquals(expectedResult, result);
+    }
+
+    /*
+     * Test of deleteDetail method, of class Order.
+     * Test the deleteDetail method with a non-existent detail by orderDetail object
+     */
+    @Test
+    public void test_delete_detail_order_non_existent_by_orderDetail() {
+        String expectedResult = "Detail not found";
+        String result = "";
+
+        try {
+            OrderDetail od = null;
+            this.instance.deleteDetail(od);
+            fail("Expected a ServiceException to be thrown when the detail does not exist.");
+        } catch (ServiceException e) {
+            result = e.getMessage();
+        }
+
+        assertEquals(expectedResult, result);
+    }
+
+    /*
+     * Test of deleteDetail method, of class Order.
+     * Test the deleteDetail method with a correct detail by position
+     */
+    @Test
+    public void test_delete_detail_order_correct_by_position() throws ServiceException {
+        int expectedResult = 0;
+        int result = this.instance.deleteDetail(0);
+
+        assertEquals(expectedResult, result);
     }
 
     /**
