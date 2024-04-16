@@ -424,24 +424,23 @@ public class OrderTest {
      * Test of orderConfirmation method, of class Order.
      */
     @Test
-    public void testOrderConfirmation() {
-        System.out.println("orderConfirmation");
-        Order instance = new Order();
-        instance.orderConfirmation();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void test_order_confirmation() {
+        double expectedTotalCost = 149.65;
+
+        this.instance.orderConfirmation();
+
+        assertEquals("CONFIRMED", this.instance.getStatus());
+        assertEquals(expectedTotalCost, this.instance.getTotalCost(), 0.001);
     }
 
     /**
      * Test of orderCanceled method, of class Order.
      */
     @Test
-    public void testOrderCanceled() {
-        System.out.println("orderCanceled");
-        Order instance = new Order();
-        instance.orderCanceled();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void test_order_canceled() {
+        this.instance.orderCanceled();
+
+        assertEquals("CANCELED", this.instance.getStatus());
     }
 
     /**
