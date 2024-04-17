@@ -65,15 +65,21 @@ public class Order extends Operation implements Storable {
         return this.shopCart.size();
     }
 
-    public void setDetail(Marketable product, int amount) throws BuildException, ServiceException {
+    public int setDetail(Marketable product, int amount) throws BuildException, ServiceException {
+        int error = 0;
+
         if (this.status == OrderStatus.CREATED) {
             OrderDetail od = this.findByRef(String.valueOf(product.getId()));
             if (od == null) {
                 this.shopCart.add(OrderDetail.getInstance(product, amount, 0));
             } else {
-                updateDetail(String.valueOf(product.getId()), (amount + od.getAmount()));
+                error = updateDetail(String.valueOf(product.getId()), (amount + od.getAmount()));
             }
+        } else {
+            error = -2;
         }
+
+        return error;
     }
 
     public String getDetail(int pos) throws ServiceException {
@@ -138,14 +144,6 @@ public class Order extends Operation implements Storable {
         return 0;
     }
 
-    public double getPrice() {
-        this.totalCost = 0;
-        for (OrderDetail od : this.shopCart) {
-            this.totalCost += od.getDetailCost();
-        }
-        return this.totalCost;
-    }
-
     protected OrderDetail findByPos(int pos) {
         if (pos < 0 || pos >= this.shopCart.size()) {
             return null;
@@ -202,7 +200,7 @@ public class Order extends Operation implements Storable {
 
     @Override
     public double getTotalCost() {
-        if (this.status != OrderStatus.CREATED) {
+        if (this.status != OrderStatus.CANCELED) {
             this.totalCost = 0;
             for (OrderDetail od : this.shopCart) {
                 this.totalCost += od.getDetailCost();
