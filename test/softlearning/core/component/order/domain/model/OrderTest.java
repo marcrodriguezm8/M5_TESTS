@@ -216,12 +216,30 @@ public class OrderTest {
 
         assertEquals(expectedResult, result);
     }
+    @Test
+    public void test_set_detail_null() throws NullPointerException, BuildException, ServiceException{
+        String result = "";
+
+        Book testBook = null;
+        try{
+            this.instance.setDetail(testBook, 1);
+        }
+        catch(NullPointerException e){
+            result = e.getMessage();
+        }
+
+        assertNull(result);
+    }
 
     /**
      * Test of getDetail method, of class Order.
      */
     @Test
     public void testGetDetail_int() throws Exception {
+        assertEquals(this.instance.getDetail(1), "102,Java para todos,19.95,1,0.0");
+    }
+    @Test
+    public void testGetDetail_() throws Exception {
         assertEquals(this.instance.getDetail(1), "102,Java para todos,19.95,1,0.0");
     }
 
@@ -415,7 +433,17 @@ public class OrderTest {
     public void testFindByPos() {
         assertEquals(this.instance.findByPos(1).toString(), "102,Java para todos,19.95,1,0.0");
     }
-
+    @Test
+    public void testFindByPosNegative() {
+        String result = "";
+        try{
+            result = this.instance.findByPos(-1).toString();
+        }
+        catch(NullPointerException e){
+            result = e.getMessage();
+        }
+        assertNull(result);
+    }
     /**
      * Test of findByRef method, of class Order.
      */
@@ -423,7 +451,29 @@ public class OrderTest {
     public void testFindByRef() {
         assertEquals(this.instance.findByRef("102").toString(), "102,Java para todos,19.95,1,0.0");
     }
+    @Test
+    public void testFindByRefNull() {
+        String result = "";
+        try{
+           result =  this.instance.findByRef(null).toString();
+        }
+        catch(NullPointerException e){
+            result = e.getMessage();
+        }
+        assertNull(result);
+    }
 
+    @Test
+    public void testFindByRefEmpty() {
+        String result = "";
+        try{
+           result =  this.instance.findByRef("  ").toString();
+        }
+        catch(NullPointerException e){
+            result = e.getMessage();
+        }
+        assertNull(result);
+    }
     /**
      * Test of orderConfirmation method, of class Order.
      */
