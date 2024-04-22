@@ -203,14 +203,18 @@ public class OrderTest {
      * Test of setDetail method, of class Order.
      */
     @Test
-    public void testSetDetail() throws Exception {
-        System.out.println("setDetail");
-        Marketable product = null;
-        int amount = 0;
-        Order instance = new Order();
-        instance.setDetail(product, amount);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void test_set_detail_with_wrong_order_status() throws Exception {
+        int expectedResult = -2;
+        int result = 0;
+
+        Book testBook = Book.getInstance(103, "C# intro", "CEFPNuria", "Programacion", "C# basico",
+                "John Williams", 24.95, "5234567891013", 3, "12-12-2020",
+                12.0, 18.0, 2.0, 0.3, false);
+
+        this.instance.orderConfirmation();
+        result = this.instance.setDetail(testBook, 1);
+
+        assertEquals(expectedResult, result);
     }
 
     /**
@@ -402,14 +406,6 @@ public class OrderTest {
         int result = this.instance.deleteDetail(0);
 
         assertEquals(expectedResult, result);
-    }
-
-    /**
-     * Test of getPrice method, of class Order.
-     */
-    @Test
-    public void testGetPrice() {
-        assertEquals(this.instance.getPrice(), 149.64999999999998, 0.001);
     }
 
     /**

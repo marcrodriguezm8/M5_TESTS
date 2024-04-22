@@ -75,7 +75,7 @@ public class OrderMapper {
                 email,
                 String.valueOf(o.getClientId()),
                 name,
-                o.getPrice(),
+                o.getTotalCost(),
                 heigth,
                 width,
                 depth,
