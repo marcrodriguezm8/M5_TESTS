@@ -11,6 +11,7 @@ import softlearning.core.component.book.domain.model.Book;
 import softlearning.core.component.client.domain.model.Client;
 import softlearning.core.component.shared.exceptions.BuildException;
 import softlearning.core.component.shared.exceptions.ServiceException;
+import softlearning.core.component.shared.physics.PhysicalData;
 import softlearning.core.component.shared.products.Marketable;
 
 import static org.junit.Assert.*;
@@ -22,6 +23,7 @@ public class OrderTest {
 
     private Order instance;
     private Client c;
+    private PhysicalData orderPackage;
 
     //private final ArrayList<OrderDetail> shopCart;
 
@@ -156,8 +158,6 @@ public class OrderTest {
         double expectedVolume = 10.0 * 5.0 * 3.0;
         assertEquals(expectedVolume, this.instance.getVolum(), 0.01); // 0.01 es el margen de error permitido
     }
-
-
     /**
      * Test of getWeight method, of class Order.
      */
@@ -181,8 +181,26 @@ public class OrderTest {
 
         assertTrue(this.instance.isFragile());
     }
+    @Test
+    public void testSetPackageDimensions() {
+        Order order = new Order();
+        String physics = "h:10,w:20,d:5,W:15,f:true";
 
+        try {
+            order.setPackageDimensions(physics);
+        } catch (BuildException e) {
+            fail("No debería lanzar una excepción");
+        }
 
+        PhysicalData packageData = order.orderPackage;
+        assertEquals(10.0, packageData.getHeigth(), 0.01);
+        assertEquals(20.0, packageData.getWidth(), 0.01);
+        assertEquals(5.0, packageData.getDepth(), 0.01);
+        assertEquals(15.0, packageData.getWeigth(), 0.01);
+        assertTrue(packageData.getFragile());
+
+    }
+    
     /**
      * Test of getClientId method, of class Order.
      */
@@ -496,20 +514,6 @@ public class OrderTest {
 
         assertEquals("CANCELED", this.instance.getStatus());
     }
-
-    /**
-     * Test of setPackageDimensions method, of class Order.
-     */
-    @Test
-    public void testSetPackageDimensions() throws Exception {
-        System.out.println("setPackageDimensions");
-        String physics = "";
-        Order instance = new Order();
-        instance.setPackageDimensions(physics);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
     /**
      * Test of getTotalCost method, of class Order.
      */
