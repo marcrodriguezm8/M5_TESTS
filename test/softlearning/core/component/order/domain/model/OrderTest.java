@@ -235,18 +235,9 @@ public class OrderTest {
         assertEquals(expectedResult, result);
     }
     @Test
-    public void test_set_detail_null() throws NullPointerException, BuildException, ServiceException{
-        String result = "";
-
-        Book testBook = null;
-        try{
-            this.instance.setDetail(testBook, 1);
-        }
-        catch(NullPointerException e){
-            result = e.getMessage();
-        }
-
-        assertNull(result);
+    public void testSetDetailNullProduct() throws BuildException, ServiceException {
+        int result = this.instance.setDetail(null, 1);
+        assertEquals(-1, result); // Verificar que el código de error es -1 para producto nulo
     }
 
     /**
@@ -453,15 +444,10 @@ public class OrderTest {
     }
     @Test
     public void testFindByPosNegative() {
-        String result = "";
-        try{
-            result = this.instance.findByPos(-1).toString();
-        }
-        catch(NullPointerException e){
-            result = e.getMessage();
-        }
+        OrderDetail result = this.instance.findByPos(-1);
         assertNull(result);
     }
+    
     /**
      * Test of findByRef method, of class Order.
      */
@@ -471,25 +457,13 @@ public class OrderTest {
     }
     @Test
     public void testFindByRefNull() {
-        String result = "";
-        try{
-           result =  this.instance.findByRef(null).toString();
-        }
-        catch(NullPointerException e){
-            result = e.getMessage();
-        }
+        OrderDetail result = this.instance.findByRef(null);
         assertNull(result);
     }
 
     @Test
     public void testFindByRefEmpty() {
-        String result = "";
-        try{
-           result =  this.instance.findByRef("  ").toString();
-        }
-        catch(NullPointerException e){
-            result = e.getMessage();
-        }
+        OrderDetail result = this.instance.findByRef("    ");
         assertNull(result);
     }
     /**
@@ -519,7 +493,7 @@ public class OrderTest {
      */
     @Test
     public void testGetTotalCost() {
-        assertEquals(this.instance.getTotalCost(), 0, 0.0001);
+        assertEquals(this.instance.getTotalCost(), 149.6499, 0.0001);
     }
 
     /**

@@ -67,8 +67,10 @@ public class Order extends Operation implements Storable {
 
     public int setDetail(Marketable product, int amount) throws BuildException, ServiceException {
         int error = 0;
-
-        if (this.status == OrderStatus.CREATED) {
+    
+        if (product == null) {
+            error = -1;
+        } else if (this.status == OrderStatus.CREATED) {
             OrderDetail od = this.findByRef(String.valueOf(product.getId()));
             if (od == null) {
                 this.shopCart.add(OrderDetail.getInstance(product, amount, 0));
@@ -76,11 +78,12 @@ public class Order extends Operation implements Storable {
                 error = updateDetail(String.valueOf(product.getId()), (amount + od.getAmount()));
             }
         } else {
-            error = -2;
+            error = -2; 
         }
-
+    
         return error;
     }
+    
 
     public String getDetail(int pos) throws ServiceException {
         return this.getDetail(this.findByPos(pos));
@@ -146,7 +149,9 @@ public class Order extends Operation implements Storable {
 
     protected OrderDetail findByPos(int pos) {
         if (pos < 0 || pos >= this.shopCart.size()) {
+            System.out.println("'hola'");
             return null;
+            
         }
         return this.shopCart.get(pos);
     }
