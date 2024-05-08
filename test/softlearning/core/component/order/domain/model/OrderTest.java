@@ -69,7 +69,7 @@ public class OrderTest {
     @Test
     public void testGetInstanceBadId() {
         Order order = null;
-        System.out.println("hola");
+
         String expectedResult = "Bad ID";
         String result = "";
         try {

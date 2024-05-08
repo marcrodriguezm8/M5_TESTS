@@ -149,7 +149,6 @@ public class Order extends Operation implements Storable {
 
     protected OrderDetail findByPos(int pos) {
         if (pos < 0 || pos >= this.shopCart.size()) {
-            System.out.println("'hola'");
             return null;
             
         }
