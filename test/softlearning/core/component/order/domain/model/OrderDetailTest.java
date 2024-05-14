@@ -4,7 +4,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import softlearning.core.component.book.domain.model.Book;
-import softlearning.core.component.order.domain.*;
 import softlearning.core.component.client.domain.model.Client;
 import softlearning.core.component.shared.exceptions.BuildException;
 import softlearning.core.component.shared.exceptions.ServiceException;
@@ -40,9 +39,17 @@ public class OrderDetailTest {
     public void tearDown() throws Exception {
         this.orderDetail = null;
     }
-    /**
-     * Test of badAmount method, of class OrderDetail.
-     */
+
+    @Test
+    public void testGetInstanceWithNullMarketable() {
+        OrderDetail orderDetail = null;
+        String expectedResult = "Bad marketable;";
+        try {
+            orderDetail = OrderDetail.getInstance(null, 10, 10);
+        } catch (BuildException ex) {
+            assertEquals(ex.getMessage(), "Bad marketable;");
+        }
+    }
     @Test
     public void testGetInstanceOrderClientBadAmount() throws BuildException {
         OrderDetail orderDetail = null;
@@ -58,9 +65,6 @@ public class OrderDetailTest {
         }
         assertEquals(result, expectedResult);
     }
-    /**
-     * Test of badDiscount method, of class OrderDetail.
-     */
     @Test
     public void testGetInstanceOrderClientBadDiscount() throws BuildException {
         OrderDetail orderDetail = null;
@@ -75,6 +79,19 @@ public class OrderDetailTest {
             result += ex.getMessage();
         }
         assertEquals(result, expectedResult);
+    }
+    @Test
+    public void testGetInstanceWithCorrectValues() {
+        OrderDetail orderDetail = null;
+        try {
+            Book book = Book.getInstance(201, "PHP avanzado II", "CEFPNuria", "Programacion", "PHP",
+                    "Richard Stallman", 15.95, "7234567891013", 3, "23-10-2022",
+                    15.0, 20.0, 3.0, 0.4, false);
+            orderDetail = OrderDetail.getInstance(book, 10, 10);
+        } catch (BuildException ex) {
+            fail("No exception should be thrown");
+        }
+        assertNotNull(orderDetail);
     }
     @Test
     public void testGetAmount() {
@@ -120,7 +137,6 @@ public class OrderDetailTest {
     public void testSetMarketableNull() throws BuildException{
         assertEquals(this.orderDetail.setMarketable(null), -1);
     }
-
     @Test
     public void testGetDetailCost() {
         assertEquals(this.orderDetail.getDetailCost(), -1435.5, 0.01);
@@ -133,5 +149,24 @@ public class OrderDetailTest {
     public void testToString() {
         assertEquals(this.orderDetail.toString(), "201,PHP avanzado II,15.95,10,10.0");
     }
+    @Test
+    public void testIntRef() {
+        assertEquals(201, this.orderDetail.getIntRef());
+    }
+    @Test
+    public void testIntRefByNull() {
+        this.orderDetail.setMarketable(null);
 
+        assertEquals(201, this.orderDetail.getIntRef());
+    }
+    @Test
+    public void testGetStringRef() {
+        assertEquals("201", this.orderDetail.getStringRef());
+    }
+    @Test
+    public void testGetStringRefByNull() {
+        this.orderDetail.setMarketable(null);
+
+        assertEquals("201", this.orderDetail.getStringRef());
+    }
 }
