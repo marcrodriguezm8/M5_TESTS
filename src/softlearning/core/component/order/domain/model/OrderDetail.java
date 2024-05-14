@@ -49,8 +49,10 @@ public class OrderDetail {
         return 0;
     }   
 
-    protected void setMarketable (Marketable m) {
+    protected int setMarketable (Marketable m) {
+        if(m == null) return -1;
         this.m = m;
+        return 0;
     }
     
     public double getDetailCost() {

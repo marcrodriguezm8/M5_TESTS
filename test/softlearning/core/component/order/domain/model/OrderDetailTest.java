@@ -78,8 +78,60 @@ public class OrderDetailTest {
     }
     @Test
     public void testGetAmount() {
-        //assertEquals(result, expectedResult);
+        assertEquals(this.orderDetail.getAmount(), 10);
+    }
+    @Test
+    public void testSetAmount() {
+        assertEquals(this.orderDetail.setAmount(20), 0);
+    }
+    @Test
+    public void testSetAmountNegative() {
+        assertEquals(this.orderDetail.setAmount(-6), -1);
+    }
+    @Test
+    public void testSetAmountZero() {
+        assertEquals(this.orderDetail.setAmount(0), -1);
+    }
+    @Test
+    public void testGetDiscount() {
+        assertEquals(this.orderDetail.getDiscount(), 10, 0.01);
+    }
+    @Test
+    public void testSetDiscount() {
+        assertEquals(this.orderDetail.setDiscount(50), 0);
+    }
+    @Test
+    public void testSetDiscountZero() {
+        assertEquals(this.orderDetail.setDiscount(0), 0);
+    }
+    @Test
+    public void testSetDiscountNegative() {
+        assertEquals(this.orderDetail.setDiscount(-10), -1);
+    }
+    @Test
+    public void testSetMarketable() throws BuildException{
+        Book b = Book.getInstance(203, "C# avanzado", "CEFPNuria", "Programacion", "C# intermedio",
+        "John Williams", 34.95, "5234567891013", 4, "12-12-2022",
+        15.0, 20.0, 3.0, 0.4, false);
+
+        assertEquals(this.orderDetail.setMarketable(b), 0);
+    }
+    @Test
+    public void testSetMarketableNull() throws BuildException{
+        assertEquals(this.orderDetail.setMarketable(null), -1);
     }
 
+    @Test
+    public void testGetDetailCost() {
+        assertEquals(this.orderDetail.getDetailCost(), -1435.5, 0.01);
+    }
+    @Test
+    public void testGetDetail() {
+        assertEquals(this.orderDetail.getDetail(), "201,PHP avanzado II,15.95,10,10.0");
+    }
+    @Test
+    public void testToString() {
+        assertEquals(this.orderDetail.toString(), "201,PHP avanzado II,15.95,10,10.0");
+    }
 
 }
