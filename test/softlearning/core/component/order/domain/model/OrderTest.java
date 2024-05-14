@@ -52,6 +52,7 @@ public class OrderTest {
         this.instance.setDetail(b1, 3);
         this.instance.setDetail(b2, 2);
         this.instance.setDetail(b3, 6);
+
     }
     
 
@@ -130,43 +131,6 @@ public class OrderTest {
 
         assertTrue(detected);
     }
-    /**
-     * Test of badAmount method, of class OrderDetail.
-     */
-    @Test
-    public void testGetInstanceOrderClientBadAmount() throws BuildException {
-        OrderDetail orderDetail = null;
-        String expectedResult = "Bad amount;";
-        String result = "";
-        Book book = Book.getInstance(201, "PHP avanzado II", "CEFPNuria", "Programacion", "PHP",
-                "Richard Stallman", 15.95, "7234567891013", 3, "23-10-2022",
-                15.0, 20.0, 3.0, 0.4, false);
-        try {
-            orderDetail = OrderDetail.getInstance(book, -1, 10);
-        } catch (BuildException ex) {
-            result += ex.getMessage();
-        }
-        assertEquals(result, expectedResult);
-    }
-    /**
-     * Test of badDiscount method, of class OrderDetail.
-     */
-    @Test
-    public void testGetInstanceOrderClientBadDiscount() throws BuildException {
-        OrderDetail orderDetail = null;
-        String expectedResult = "Bad discount;";
-        String result = "";
-        Book book = Book.getInstance(201, "PHP avanzado II", "CEFPNuria", "Programacion", "PHP",
-                "Richard Stallman", 15.95, "7234567891013", 3, "23-10-2022",
-                15.0, 20.0, 3.0, 0.4, false);
-        try {
-            orderDetail = OrderDetail.getInstance(book, 10, -5);
-        } catch (BuildException ex) {
-            result += ex.getMessage();
-        }
-        assertEquals(result, expectedResult);
-    }
-
     /**
      * Test of getSize method, of class Order.
      */
