@@ -14,9 +14,8 @@ public class OrderDetail {
       
     public static OrderDetail getInstance (Marketable m, int amount, double discount) throws BuildException{
         OrderDetail od = new OrderDetail();
-        od.setMarketable(m);
         String errorMessage = "";
-        
+        if(od.setMarketable(m) == -1) errorMessage += "Bad marketable;";
         if(od.setAmount(amount) == -1) errorMessage += "Bad amount;";
         if(od.setDiscount(discount) == -1) errorMessage += "Bad discount;";
         
