@@ -17,8 +17,9 @@ public class OrderDetail {
         od.setMarketable(m);
         String errorMessage = "";
         
-        od.setAmount(amount);
-        od.setDiscount(discount);
+        if(od.setAmount(amount) == -1) errorMessage += "Bad amount;";
+        if(od.setDiscount(discount) == -1) errorMessage += "Bad discount;";
+        
         
         if (errorMessage.length() > 0) {
             throw new BuildException(errorMessage);
@@ -43,6 +44,7 @@ public class OrderDetail {
     }
 
     public int setDiscount(double discount) {
+        if(Check.checkDouble(discount) == -1) return -1;
         this.discount = discount;
         return 0;
     }   

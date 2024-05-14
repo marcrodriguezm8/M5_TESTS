@@ -34,25 +34,26 @@ public class OrderTest {
     // y sin alteraciones entre tests.
     @Before
     public void setUp() throws BuildException, ServiceException {
-        Book b1 = Book.getInstance(101, "PHP avanzado", "CEFPNuria", "Programacion", "PHP",
-                "Richard Stallman", 14.95, "7234567891013", 2, "23-10-2021",
-                12.0, 18.0, 2.0, 0.3, false);
-        Book b2 = Book.getInstance(102, "Java para todos", "CEFPNuria", "Programacion", "Java basico",
-                "Uncle Bob", 19.95, "1234567891013", 4, "22-10-2019",
-                12.0, 18.0, 2.0, 0.3, false);
-        Book b3 = Book.getInstance(103, "C# intro", "CEFPNuria", "Programacion", "C# basico",
-                "John Williams", 24.95, "5234567891013", 3, "12-12-2020",
-                12.0, 18.0, 2.0, 0.3, false);
-
-        this.c = Client.getInstance("Jose Meseguer", "12345456X", "22-02-2000", "carrer kalea 2",
-                "666555444", "111222333444", "********", 1, false, "2023-02-10");
-
-        this.instance = Order.getInstance(1991, "10/02/2023-09:10:15", "Esta es una descripcion breve", c);
-
-        this.instance.setDetail(b1, 2);
-        this.instance.setDetail(b2, 1);
-        this.instance.setDetail(b3, 4);
+        Book b1 = Book.getInstance(201, "PHP avanzado II", "CEFPNuria", "Programacion", "PHP",
+                "Richard Stallman", 15.95, "7234567891013", 3, "23-10-2022",
+                15.0, 20.0, 3.0, 0.4, false);
+        Book b2 = Book.getInstance(202, "Java para expertos", "CEFPNuria", "Programacion", "Java avanzado",
+                "Uncle Bob", 29.95, "1234567891013", 5, "22-10-2021",
+                15.0, 20.0, 3.0, 0.4, false);
+        Book b3 = Book.getInstance(203, "C# avanzado", "CEFPNuria", "Programacion", "C# intermedio",
+                "John Williams", 34.95, "5234567891013", 4, "12-12-2022",
+                15.0, 20.0, 3.0, 0.4, false);
+    
+        this.c = Client.getInstance("Juan Pérez", "12345456X", "22-02-1995", "calle San Juan 10",
+                "666999888", "111222333444", "********", 2, false, "2022-02-10");
+    
+        this.instance = Order.getInstance(1992, "11/02/2023-09:10:15", "Esta es una descripción detallada", c);
+    
+        this.instance.setDetail(b1, 3);
+        this.instance.setDetail(b2, 2);
+        this.instance.setDetail(b3, 6);
     }
+    
 
     // El método tearDown() sirve para limpiar los objetos que se han utilizado en los tests.
     // En el caso de este proyecto, no es necesario limpiar nada, pero es una buena práctica ya que facilita la
@@ -69,7 +70,6 @@ public class OrderTest {
     @Test
     public void testGetInstanceBadId() {
         Order order = null;
-        System.out.println("hola");
         String expectedResult = "Bad ID";
         String result = "";
         try {
@@ -120,16 +120,50 @@ public class OrderTest {
         } catch (BuildException ex) {
             result += ex.getMessage();
         }
-        System.out.println(result);
         boolean detected = false;
 
         for (String word : expectedResult) {
-            System.out.println(word);
             if (result.contains(word))
                 detected = true;
         }
 
         assertTrue(detected);
+    }
+    /**
+     * Test of badAmount method, of class OrderDetail.
+     */
+    @Test
+    public void testGetInstanceOrderClientBadAmount() throws BuildException {
+        OrderDetail orderDetail = null;
+        String expectedResult = "Bad amount;";
+        String result = "";
+        Book book = Book.getInstance(201, "PHP avanzado II", "CEFPNuria", "Programacion", "PHP",
+                "Richard Stallman", 15.95, "7234567891013", 3, "23-10-2022",
+                15.0, 20.0, 3.0, 0.4, false);
+        try {
+            orderDetail = OrderDetail.getInstance(book, -1, 10);
+        } catch (BuildException ex) {
+            result += ex.getMessage();
+        }
+        assertEquals(result, expectedResult);
+    }
+    /**
+     * Test of badDiscount method, of class OrderDetail.
+     */
+    @Test
+    public void testGetInstanceOrderClientBadDiscount() throws BuildException {
+        OrderDetail orderDetail = null;
+        String expectedResult = "Bad discount;";
+        String result = "";
+        Book book = Book.getInstance(201, "PHP avanzado II", "CEFPNuria", "Programacion", "PHP",
+                "Richard Stallman", 15.95, "7234567891013", 3, "23-10-2022",
+                15.0, 20.0, 3.0, 0.4, false);
+        try {
+            orderDetail = OrderDetail.getInstance(book, 10, -5);
+        } catch (BuildException ex) {
+            result += ex.getMessage();
+        }
+        assertEquals(result, expectedResult);
     }
 
     /**
@@ -206,7 +240,7 @@ public class OrderTest {
      */
     @Test
     public void testGetClientId() {
-        assertEquals(this.c.getCode(), 1);
+        assertEquals(this.c.getCode(), 2);
     }
 
     /**
@@ -245,11 +279,11 @@ public class OrderTest {
      */
     @Test
     public void testGetDetail_int() throws Exception {
-        assertEquals(this.instance.getDetail(1), "102,Java para todos,19.95,1,0.0");
+        assertEquals(this.instance.getDetail(2), "203,C# avanzado,34.95,6,0.0");
     }
     @Test
     public void testGetDetail_() throws Exception {
-        assertEquals(this.instance.getDetail(1), "102,Java para todos,19.95,1,0.0");
+        assertEquals(this.instance.getDetail(1), "202,Java para expertos,29.95,2,0.0");
     }
 
     /**
@@ -257,7 +291,7 @@ public class OrderTest {
      */
     @Test
     public void testGetDetail_String() throws Exception {
-        assertEquals(this.instance.getDetail("102"), "102,Java para todos,19.95,1,0.0");
+        assertEquals(this.instance.getDetail("203"), "203,C# avanzado,34.95,6,0.0");
     }
 
     /**
@@ -265,7 +299,7 @@ public class OrderTest {
      */
     @Test
     public void testGetDetail_OrderDetail() throws Exception {
-        assertEquals(this.instance.getDetail(this.instance.shopCart.get(1)), "102,Java para todos,19.95,1,0.0");
+        assertEquals(this.instance.getDetail(this.instance.shopCart.get(0)), "201,PHP avanzado II,15.95,3,0.0");
     }
 
     /*
@@ -440,7 +474,7 @@ public class OrderTest {
      */
     @Test
     public void testFindByPos() {
-        assertEquals(this.instance.findByPos(1).toString(), "102,Java para todos,19.95,1,0.0");
+        assertEquals(this.instance.findByPos(1).toString(), "202,Java para expertos,29.95,2,0.0");
     }
     @Test
     public void testFindByPosNegative() {
@@ -453,7 +487,7 @@ public class OrderTest {
      */
     @Test
     public void testFindByRef() {
-        assertEquals(this.instance.findByRef("102").toString(), "102,Java para todos,19.95,1,0.0");
+        assertEquals(this.instance.findByRef("201").toString(), "201,PHP avanzado II,15.95,3,0.0");
     }
     @Test
     public void testFindByRefNull() {
@@ -471,12 +505,10 @@ public class OrderTest {
      */
     @Test
     public void test_order_confirmation() {
-        double expectedTotalCost = 149.65;
-
         this.instance.orderConfirmation();
 
         assertEquals("CONFIRMED", this.instance.getStatus());
-        assertEquals(expectedTotalCost, this.instance.getTotalCost(), 0.001);
+        assertEquals(317.45, this.instance.getTotalCost(), 0.001);
     }
 
     /**
@@ -493,7 +525,7 @@ public class OrderTest {
      */
     @Test
     public void testGetTotalCost() {
-        assertEquals(this.instance.getTotalCost(), 149.6499, 0.0001);
+        assertEquals(this.instance.getTotalCost(), 317.45, 0.0001);
     }
 
     /**
@@ -501,7 +533,7 @@ public class OrderTest {
      */
     @Test
     public void testGetClientData() {
-        assertEquals(this.instance.getClientData(), "name:Jose Meseguer;phone:666555444;address:carrer kalea 2");
+        assertEquals(this.instance.getClientData(), "name:Juan Pérez;phone:666999888;address:calle San Juan 10");
     }
 
     /**
@@ -509,6 +541,8 @@ public class OrderTest {
      */
     @Test
     public void testGetShopCart() {
-        assertEquals(this.instance.getShopCart(), "101,PHP avanzado,14.95,2,0.0;102,Java para todos,19.95,1,0.0;103,C# intro,24.95,4,0.0;");
+        assertEquals(this.instance.getShopCart(), "201,PHP avanzado II,15.95,3,0.0;202,Java para expertos,29.95,2,0.0;203,C# avanzado,34.95,6,0.0;");
     }
+
+
 }
